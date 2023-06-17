@@ -30,7 +30,8 @@ jobs:
           path: data.tsv
           write-mode: append
           contents: |
-            ${{ steps.api.outputs.response }}
+            ${{ steps.api.outputs.response }}\
+            
             
       - name: Commit to current branch
         id: commit

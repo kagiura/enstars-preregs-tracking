@@ -30,7 +30,7 @@ jobs:
           path: data.tsv
           write-mode: append
           contents: |
-            ${{ steps.date.outputs.date }}\t${{ steps.api.outputs.response.data }}
+            ${{ steps.date.outputs.date }}	${{ steps.api.outputs.response }}
             
       - name: Commit to current branch
         id: commit

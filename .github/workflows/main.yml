@@ -1,0 +1,43 @@
+name: Overwrite some file
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23 * * *"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get current date
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y/%m/%d %H:%M')"
+        
+      - name: "Call API 1"
+        uses: indiesdev/curl@v1.1
+        id: api
+        with:
+          url: https://es.ensemblestars.com/api-2021/api/c/user/v2/count
+          method: "GET"
+          log-response: true
+          
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Overwrite file
+        uses: "DamianReeves/write-file-action@master"
+        with:
+          path: data.tsv
+          write-mode: append
+          contents: |
+            ${{ steps.date.outputs.date }}\t${{ steps.api.outputs.response.data }}
+            
+      - name: Commit & Push
+        uses: Andro999b/push@v1.3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: main
+          force: true
+          message: Updated at ${{ steps.date.outputs.date }}
+          
+          

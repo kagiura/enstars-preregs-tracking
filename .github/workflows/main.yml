@@ -1,4 +1,4 @@
-name: Overwrite some file
+name: Fetch latest count
 
 on:
   workflow_dispatch:
@@ -32,12 +32,10 @@ jobs:
           contents: |
             ${{ steps.date.outputs.date }}\t${{ steps.api.outputs.response.data }}
             
-      - name: Commit & Push
-        uses: Andro999b/push@v1.3
+      - name: Commit to current branch
+        id: commit
+        uses: stefanzweifel/git-auto-commit-action@v4
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: main
-          force: true
-          message: Updated at ${{ steps.date.outputs.date }}
+          commit_message: Updated at ${{ steps.date.outputs.date }}
           
           
